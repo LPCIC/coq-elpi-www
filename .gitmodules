@@ -1,0 +1,6 @@
+[submodule "coq-elpi"]
+	path = coq-elpi
+	url = https://github.com/LPCIC/coq-elpi.git
+[submodule "jscoq"]
+	path = jscoq
+	url = https://github.com/ejgallego/jscoq.git
