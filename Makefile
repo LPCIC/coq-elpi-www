@@ -20,6 +20,9 @@ jscoq:
 	       make -C jscoq -j2 plugin-comp)
 	cp -r ext/CodeMirror-minified/* jscoq/ui-external/CodeMirror/
 	cp -r ext/CodeMirror-TeX-input jscoq/ui-external/
+	$(call in_opam,\
+		make -C jscoq dist BUILDDIR=$(PWD)/docs)
+	rm -f $(PWD)/docs/index.html
 
 upgrade-elpi:
 	$(call opam, update)

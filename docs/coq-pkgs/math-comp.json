@@ -1,0 +1,20 @@
+{
+  "desc": "math-comp",
+  "deps": [],
+  "pkgs": [
+    { "pkg_id": [ "mathcomp", "algebra" ], "vo_files": [], "cma_files": [] },
+    { "pkg_id": [ "mathcomp", "fingroup" ], "vo_files": [], "cma_files": [] },
+    { "pkg_id": [ "mathcomp", "solvable" ], "vo_files": [], "cma_files": [] },
+    { "pkg_id": [ "mathcomp", "field" ], "vo_files": [], "cma_files": [] },
+    {
+      "pkg_id": [ "mathcomp", "character" ],
+      "vo_files": [],
+      "cma_files": []
+    },
+    {
+      "pkg_id": [ "mathcomp", "odd_order" ],
+      "vo_files": [],
+      "cma_files": []
+    }
+  ]
+}
