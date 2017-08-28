@@ -23,6 +23,7 @@ jscoq:
 	$(call in_opam,\
 		make -C jscoq dist BUILDDIR=$(PWD)/docs)
 	rm -f $(PWD)/docs/index.html
+	rm -f $(PWD)/docs/ui-external/CodeMirror/.gitignore
 
 upgrade-elpi:
 	$(call opam, update)
