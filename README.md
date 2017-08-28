@@ -1,2 +1,1 @@
-# coq-elpi-www
-Website of coq-elpi
+# [Website of coq-elpi](https://lpcic.github.io/coq-elpi-www)
