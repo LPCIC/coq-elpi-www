@@ -4,7 +4,10 @@ in_opam = eval `$(call opam, config, env)`; $(1)
 OCAML=4.04.1+32bit
 COQLIB=opam/$(OCAML)/lib/coq/user-contrib/elpi/
 
-all: opam jscoq tutorials
+all: 
+	$(MAKE) opam
+	$(MAKE) jscoq
+	$(MAKE) tutorials
 
 tutorials: docs/tutorial-elpi.html docs/tutorial-coq_elpi.html
 
