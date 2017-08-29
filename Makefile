@@ -1,17 +1,17 @@
 PWD=$(shell pwd)
 opam = opam $(1) --root=$(PWD)/opam $(2)
 in_opam = eval `$(call opam, config, env)`; $(1)
+OCAML=4.04.1+32bit
+COQLIB=opam/$(OCAML)/lib/coq/user-contrib/elpi/
 
 all: opam jscoq tutorials
 
-.PHONY: tutorials
-tutorials: docs/tutorial-elpi.md docs/tutorial-coq_elpi.md
+tutorials: docs/tutorial-elpi.html docs/tutorial-coq_elpi.html
 
-docs/tutorial-%.md:
-	echo '{% include header.html content="$*" %}' >  $@
-	$(call in_opam,\
-		cat `coqc -where`/user-contrib/elpi/tutorial_$*.v >> $@)
-	echo '{% include footer.html content="$*" %}' >> $@
+docs/tutorial-%.html: $(COQLIB)tutorial_%.v Makefile 
+	sed 's/@TUTORIAL@/$*/' docs/_includes/header.html >  $@
+	sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g; s/'"'"'/\&#39;/g' $< >> $@
+	cat docs/_includes/footer.html >> $@
 
 .PHONY: jscoq
 jscoq:
@@ -40,7 +40,7 @@ upgrade-elpi:
 	$(call opam, install, elpi coq-elpi)
 
 opam: Makefile
-	$(call opam, init, --compiler=4.04.1+32bit -n)
+	$(call opam, init, --compiler=$(OCAML) -n)
 	# temporary overlay for Coq v8.7, see PR#958 PR#951
 	-$(call opam, repo, add coq-dev file:///home/gares/COQ/opam-coq-archive/core-dev/)
 	-$(call opam, repo, add coq-extra-dev https://coq.inria.fr/opam/extra-dev/)

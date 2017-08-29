@@ -1,12 +1,29 @@
-{% include header.html content="coq_elpi" %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="description" content="An Online IDE for the Coq Theorem Prover" />
+
+    <link rel="stylesheet" href="ui-external/bootstrap.min.css" />
+
+    <title>Tutorial: coq_elpi</title>
+  </head>
+
+<body>
+  <div id="ide-wrapper" class="toggled">
+  <div id="code-wrapper">
+  <div id="document">
+    <h3>Tutorial: coq_elpi</h3>
+  <div>
+    <textarea id="tutorial" >
 Require Import elpi.
 
 (* Coq-ELPI Tutorial
 
    If you are using CoqIDE please chose
-   "coq-elpi" in
+   &quot;coq-elpi&quot; in
 
-     Edit -> Preferences -> Colors
+     Edit -&gt; Preferences -&gt; Colors
 
    in order to have nice syntax highlight
    of embedded code *)
@@ -19,94 +36,94 @@ Require Import elpi.
 (* Set current program name to tutorial.hello *)
 Elpi Program tutorial.hello.
 (* Load coq-lib (contains the coq API) *)
-Elpi Accumulate File "coq-lib.elpi".
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
 (* Add a clause for main *)
-Elpi Accumulate "
-  main []     :- coq-say ""hello world"".
-  main [Name] :- Msg is ""hello "" ^ Name, coq-say Msg.
-".
+Elpi Accumulate &quot;
+  main []     :- coq-say &quot;&quot;hello world&quot;&quot;.
+  main [Name] :- Msg is &quot;&quot;hello &quot;&quot; ^ Name, coq-say Msg.
+&quot;.
 (* Caveat: when clauses are accumulated from
    a .v file they are just strings, hence
-   inner strings like "hello world" have to be
+   inner strings like &quot;hello world&quot; have to be
    escaped *)
 
-(* Let's now invoke our first program *)
+(* Let&#39;s now invoke our first program *)
 Elpi tutorial.hello.
-Elpi tutorial.hello "user!".
-Fail Elpi tutorial.hello "too" "many" "arguments".
+Elpi tutorial.hello &quot;user!&quot;.
+Fail Elpi tutorial.hello &quot;too&quot; &quot;many&quot; &quot;arguments&quot;.
 
 (* One can define many programs *)
 Elpi Program tutorial.hello2.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate " main [] :- coq-say ""hello there"". ".
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot; main [] :- coq-say &quot;&quot;hello there&quot;&quot;. &quot;.
 Elpi tutorial.hello2.
 
 (* And extend old programs *)
 Elpi Program tutorial.hello.
-Elpi Accumulate " main [X,Y,Z] :- Msg is X ^ Y ^ Z, coq-say Msg. ".
-Elpi tutorial.hello "too" "many" "arguments".
+Elpi Accumulate &quot; main [X,Y,Z] :- Msg is X ^ Y ^ Z, coq-say Msg. &quot;.
+Elpi tutorial.hello &quot;too&quot; &quot;many&quot; &quot;arguments&quot;.
 
 (* Clauses are appended to the program, unless an anchor point
-   is declared by naming a clause with :name "the name" *)
+   is declared by naming a clause with :name &quot;the name&quot; *)
 
 Elpi Program tutorial.hello3.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate "
-:name ""error-empty-args""
-  main []  :- fatal-error ""1 argument expected"".
-  main [X] :- coq-say X. ".
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot;
+:name &quot;&quot;error-empty-args&quot;&quot;
+  main []  :- fatal-error &quot;&quot;1 argument expected&quot;&quot;.
+  main [X] :- coq-say X. &quot;.
 Fail Elpi tutorial.hello3.
 
-(* Let's graft this clause before the one giving an error *)
-Elpi Accumulate "
-:before ""error-empty-args""
-  main [] :- coq-say ""fake argument"".
-".
+(* Let&#39;s graft this clause before the one giving an error *)
+Elpi Accumulate &quot;
+:before &quot;&quot;error-empty-args&quot;&quot;
+  main [] :- coq-say &quot;&quot;fake argument&quot;&quot;.
+&quot;.
 Elpi tutorial.hello3.
 
 (* The current set of clauses composing a program can
    be printed as follows *)
 Elpi Print
   tutorial.hello3 (* program name *)
-  "hello3.html"   (* output file  *)
-  "pervasives.elpi" "coq-lib.elpi" "lp-lib.elpi" (* files to skip *).
+  &quot;hello3.html&quot;   (* output file  *)
+  &quot;pervasives.elpi&quot; &quot;coq-lib.elpi&quot; &quot;lp-lib.elpi&quot; (* files to skip *).
 
-(** Coq's terms **************** *)
+(** Coq&#39;s terms **************** *)
 
 Elpi Program tutorial.coq_HOAS.
 
 (*
 
   Coq terms are represented in HOAS style, i.e. the bound variables of
-  λProlog are used to represent Coq's ones.
+  λProlog are used to represent Coq&#39;s ones.
 
 *)
 
-Elpi Accumulate " % this is an excerpt of coq-lib
+Elpi Accumulate &quot; % this is an excerpt of coq-lib
 kind term type.
 
 % constants: inductive types, inductive constructors, definitions
-type indt  @gref -> term. % nat, list, ...
-type indc  @gref -> term. % O, S, nil, cons, ...
-type const @gref -> term. % Nat.add, List.append, ...
+type indt  @gref -&gt; term. % nat, list, ...
+type indc  @gref -&gt; term. % O, S, nil, cons, ...
+type const @gref -&gt; term. % Nat.add, List.append, ...
 
 % binders: to form functions, arities and local definitions
-type lam  @name -> term -> (term -> term) -> term.         % fun x : t =>
-type prod @name -> term -> (term -> term) -> term.         % forall x : t,
-type let  @name -> term -> term -> (term -> term) -> term. % let x := v : T in
+type lam  @name -&gt; term -&gt; (term -&gt; term) -&gt; term.         % fun x : t =&gt;
+type prod @name -&gt; term -&gt; (term -&gt; term) -&gt; term.         % forall x : t,
+type let  @name -&gt; term -&gt; term -&gt; (term -&gt; term) -&gt; term. % let x := v : T in
 
 % other term formers: function application, pattern matching and recursion
-type app   list term -> term.                   % app [hd|args]
-type match term -> term -> list term -> term.   % match t p [branch])
-type fix   @name -> int -> term -> (term -> term) -> term. % fix name rno ty bo
+type app   list term -&gt; term.                   % app [hd|args]
+type match term -&gt; term -&gt; list term -&gt; term.   % match t p [branch])
+type fix   @name -&gt; int -&gt; term -&gt; (term -&gt; term) -&gt; term. % fix name rno ty bo
 
-% Universes (for the ""sort"" term former)
+% Universes (for the &quot;&quot;sort&quot;&quot; term former)
 kind universe type.
 type prop universe.          % impredicative sort of propositions
-type typ  @univ -> universe. % predicative sort of datatypes (carries a level)
+type typ  @univ -&gt; universe. % predicative sort of datatypes (carries a level)
 
-type sort  universe -> term. % Prop, Type@{i}
-".
+type sort  universe -&gt; term. % Prop, Type@{i}
+&quot;.
 
 (*  @name, @gref and @univ are Coq datatypes that are not directly
     accessible from an elpi program. 
@@ -119,9 +136,9 @@ type sort  universe -> term. % Prop, Type@{i}
 *)
 
 
-(** Reading Coq's environment **************** *)
+(** Reading Coq&#39;s environment **************** *)
 
-(* APIs to access Coq's environment are listed in
+(* APIs to access Coq&#39;s environment are listed in
    coq-lib and the are all called coq-env-... 
    coq-locate maps a string to the corresponding
    term global constant/inductive/constructor.
@@ -129,8 +146,8 @@ type sort  universe -> term. % Prop, Type@{i}
 *)
 
 Elpi Program tutorial.env.read.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate "
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot;
   print-ind GR :-
     coq-env-indt GR IsInd Lno LUno Ty Knames Ktypes,
     coq-say GR, coq-say Knames, coq-say Ktypes.
@@ -138,33 +155,33 @@ Elpi Accumulate "
     coq-env-const GR BO TY, coq-say TY, coq-say BO.
   main [X] :-
     coq-locate X (indt GR), print-ind GR,
-    X_ind is X ^ ""_rect"", coq-locate X_ind (const GRI),
+    X_ind is X ^ &quot;&quot;_rect&quot;&quot;, coq-locate X_ind (const GRI),
       print-const GRI.
-".
+&quot;.
 
-Elpi tutorial.env.read "nat".
+Elpi tutorial.env.read &quot;nat&quot;.
 
 (** @name, @gref and @univ **************** *)
 
 (* Recall that @name subterms are just for pretty printing *)
 
-Definition c1 := fun x => x + 1.
-Definition c2 := fun y => y + 2.
+Definition c1 := fun x =&gt; x + 1.
+Definition c2 := fun y =&gt; y + 2.
 
 Elpi Program tutorial.env.read2.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate "
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot;
   main [] :-
-    coq-locate ""c1"" (const GR1),
+    coq-locate &quot;&quot;c1&quot;&quot; (const GR1),
       coq-env-const GR1 (lam N1 _ _) _,
-    coq-locate ""c2"" (const GR2),
+    coq-locate &quot;&quot;c2&quot;&quot; (const GR2),
       coq-env-const GR2 (lam N2 _ _) _,
     coq-say N1, coq-say N2,
-    N1 = N2,          % gotcha: no ""logical"" meaning
+    N1 = N2,          % gotcha: no &quot;&quot;logical&quot;&quot; meaning
     not(GR1 = GR2).   % @gref are global names
-".
+&quot;.
 
-Elpi Run tutorial.env.read2 " main [] ".
+Elpi Run tutorial.env.read2 &quot; main [] &quot;.
 
 (* This way the = predicate is alpha equivalence *)
 
@@ -172,29 +189,29 @@ Definition T1 := Type.
 Definition T2 := Type. (* two unrelated universes *)
 
 Elpi Program tutorial.env.read3.
-Elpi Accumulate File "coq-lib.elpi".
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
 
-Elpi Accumulate "
+Elpi Accumulate &quot;
   main [] :-
-    coq-locate ""T1"" (const GR1),
+    coq-locate &quot;&quot;T1&quot;&quot; (const GR1),
       coq-env-const GR1 (sort (typ T1)) _,
-    coq-locate ""T2"" (const GR2),
+    coq-locate &quot;&quot;T2&quot;&quot; (const GR2),
       coq-env-const GR2 (sort (typ T2)) _,
     not (T1 = T2),     % not the same universe
     coq-say T1, coq-say T2,
     coq-univ-eq T1 T2. % we can constrain them to be equal
-".
+&quot;.
 
 Elpi tutorial.env.read3.
 
-(** Writing Coq's environment **************** *)
+(** Writing Coq&#39;s environment **************** *)
 
 Elpi Program tutorial.env.write.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate "
-  int-2-nat 0 Z :- coq-locate ""O"" Z.
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot;
+  int-2-nat 0 Z :- coq-locate &quot;&quot;O&quot;&quot; Z.
   int-2-nat N (app[S,X]) :-
-    coq-locate ""S"" S,
+    coq-locate &quot;&quot;S&quot;&quot; S,
     M is N - 1, int-2-nat M X.
   main [X,Name] :-
     coq-locate X (indt GR),
@@ -202,19 +219,19 @@ Elpi Accumulate "
     length Kn N,
     int-2-nat N Nnat,
     coq-env-add-const Name Nnat hole _.
-".
+&quot;.
 
-Elpi tutorial.env.write "nat" "nK_nat".
-Print nK_nat. (* number of constructor of "nat" *)
+Elpi tutorial.env.write &quot;nat&quot; &quot;nK_nat&quot;.
+Print nK_nat. (* number of constructor of &quot;nat&quot; *)
 
 (* hole is the equivalent of _ in Coq, a missing
    piece of information. *)
 
-(** Quotation for Coq's terms **************** *)
+(** Quotation for Coq&#39;s terms **************** *)
 
 Elpi Program tutorial.quotations.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate "
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot;
   int-2-nat 0 {{0}}.
   int-2-nat N {{1 + lp:X}} :- M is N - 1, int-2-nat M X.
   main [X,Name] :-
@@ -223,15 +240,15 @@ Elpi Accumulate "
     length Kn N,
     int-2-nat N Nnat,
     coq-env-add-const Name Nnat {{nat}} _.
-".
+&quot;.
 
 (* Quotations work on untyped terms, i.e. _ are not filled in *)
 
-Elpi tutorial.quotations "nat" "nK_nat2".
+Elpi tutorial.quotations &quot;nat&quot; &quot;nK_nat2&quot;.
 Print nK_nat2.
 
-(* Double curly braces contain Coq's syntax that
-   is elaborated to Elpi's one. lp:ident or lp:"some text"
+(* Double curly braces contain Coq&#39;s syntax that
+   is elaborated to Elpi&#39;s one. lp:ident or lp:&quot;some text&quot;
    is the anti-quatation. *)
 
 (** More on @univ **************** *)
@@ -241,9 +258,9 @@ Print nK_nat2.
    are declared *)
 
 Elpi Program tutorial.env.univ.
-Elpi Accumulate File "coq-lib.elpi".
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
 
-Elpi Accumulate "
+Elpi Accumulate &quot;
   main [] :-
     {{T1}} = (const GR1), coq-env-const GR1 SA TA, SA = sort (typ A), TA = sort (typ A+),
     {{T2}} = (const GR2), coq-env-const GR2 SB TB, SB = sort (typ B), TB = sort (typ B+),
@@ -251,21 +268,21 @@ Elpi Accumulate "
     coq-univ-eq A B,
     coq-univ-sup A+ A++,
     coq-univ-leq A++ T,
-    coq-env-add-const ""eq12"" (app[{{@refl_equal}}, TA, SA]) (app [{{@eq}},TA,SA,SB]) _.
-".
+    coq-env-add-const &quot;&quot;eq12&quot;&quot; (app[{{@refl_equal}}, TA, SA]) (app [{{@eq}},TA,SA,SB]) _.
+&quot;.
 
 Elpi tutorial.env.univ.
 
 (* A much simpler approach is to invoke the type inference engine *)
 
 Elpi Program tutorial.env.univ2.
-Elpi Accumulate File "coq-lib.elpi".
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
 
-Elpi Accumulate "
+Elpi Accumulate &quot;
   main [] :-
     coq-elaborate {{refl_equal T1 : T1 = T2}} P PT,
-    coq-env-add-const ""eq123"" P PT _.
-".
+    coq-env-add-const &quot;&quot;eq123&quot;&quot; P PT _.
+&quot;.
 
 Elpi tutorial.env.univ2.
 
@@ -276,11 +293,11 @@ Elpi tutorial.env.univ2.
    query can be run (this is usefule while building
    a larger program) *)
 
-Elpi Run "
-  coq-locate ""nat"" (indt GR),
+Elpi Run &quot;
+  coq-locate &quot;&quot;nat&quot;&quot; (indt GR),
   coq-env-indt GR _ _ _ _ Knames Ktypes,
   map Ktypes pp Kpretty.
-".
+&quot;.
 
 (* In such case, the assignment of variables
    is printed once the query is over (debug output window).
@@ -289,7 +306,7 @@ Elpi Run "
    the program to load before the query is run
    (in case the current one does not fit)
  *)
-Elpi Run tutorial.hello " main []. ".
+Elpi Run tutorial.hello &quot; main []. &quot;.
 
 (* Important: elpi comes with a type checker
    that is run against the program and the
@@ -299,7 +316,7 @@ Elpi Run tutorial.hello " main []. ".
    Type errors are just Coq warnings, eg:
 *)
 
-Elpi Run " coq-say (app (sort prop)). ".
+Elpi Run &quot; coq-say (app (sort prop)). &quot;.
 
 (** Debugging  ********************* *)
 
@@ -307,13 +324,13 @@ Elpi Run " coq-say (app (sort prop)). ".
    the goal to be printed.  It eats one line, and leaving it
    there commented does not hurt. *)
 Elpi Program tutorial.debug.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate "
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot;
   @log (int-2-nat _ _).
   int-2-nat 0 {{0}}.
   int-2-nat N {{1 + lp:X}} :- M is N - 1, int-2-nat M X.
-".
-Elpi Run " int-2-nat 3 X ".
+&quot;.
+Elpi Run &quot; int-2-nat 3 X &quot;.
 
 (* caveat: hypothetical clauses come before the logger, so
    goal solved by them are not printed in the log *)
@@ -322,13 +339,13 @@ Elpi Run " int-2-nat 3 X ".
 (* 2. The spy predicate prints a query before/after it is
       run. *)
 Elpi Program tutorial.debug2.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate "
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot;
   int-2-nat 0 {{0}}.
   int-2-nat N {{1 + lp:X}} :- M is N - 1, spy(int-2-nat M X).
-".
+&quot;.
 
-Elpi Run " int-2-nat 3 X ".
+Elpi Run &quot; int-2-nat 3 X &quot;.
 
 (* caveat: if backtracking takes place, enter/exit prints
    are not well balanced *)
@@ -336,18 +353,43 @@ Elpi Run " int-2-nat 3 X ".
 
 (* 3. The tracing facility of the interpreter. *)
 Elpi Program tutorial.debug3.
-Elpi Accumulate File "coq-lib.elpi".
-Elpi Accumulate "
+Elpi Accumulate File &quot;coq-lib.elpi&quot;.
+Elpi Accumulate &quot;
   int-2-nat 0 {{0}}.
   int-2-nat N {{1 + lp:X}} :- M is N - 1, int-2-nat M X.
-".
+&quot;.
 Elpi Trace.  (* Prints to the terminal *)
-Elpi Run " int-2-nat 3 X ".
+Elpi Run &quot; int-2-nat 3 X &quot;.
 
 (* caveat: traces are long. one can limit it by using the
    numbers near the trace point and -trace-at. See 
    elpi -help form more details about tracing options. *)
 
-Elpi Trace "-trace-on -trace-at run 9 14 -trace-only (run|assign)".
-Elpi Run " int-2-nat 3 X ".
-{% include footer.html content="coq_elpi" %}
+Elpi Trace &quot;-trace-on -trace-at run 9 14 -trace-only (run|assign)&quot;.
+Elpi Run &quot; int-2-nat 3 X &quot;.
+</textarea>
+  </div> <!-- /#panel body -->
+  </div> <!-- /#document -->
+  </div> <!-- /#code-wrapper -->
+  </div> <!-- /#ide-wrapper -->
+
+  <script src="ui-js/jscoq-loader.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    var jscoq_ids  = ['tutorial' ];
+    var jscoq_opts = {
+        prelude:   false,
+        mock:      false,
+        base_path: './',
+        init_pkgs: ['init', 'elpi'],
+        all_pkgs:  ['init', 'math-comp', 'elpi'],
+    };
+
+    /* Global reference */
+    var coq;
+
+    loadJsCoq(jscoq_opts.base_path)
+        .then( () => coq = new CoqManager(jscoq_ids, jscoq_opts) );
+  </script>
+</body>
+</html>
