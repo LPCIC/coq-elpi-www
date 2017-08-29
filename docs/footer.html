@@ -1,0 +1,26 @@
+</textarea>
+  </div> <!-- /#panel body -->
+  </div> <!-- /#document -->
+  </div> <!-- /#code-wrapper -->
+  </div> <!-- /#ide-wrapper -->
+
+  <script src="ui-js/jscoq-loader.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    var jscoq_ids  = ['tutorial' ];
+    var jscoq_opts = {
+        prelude:   false,
+        mock:      false,
+        base_path: './',
+        init_pkgs: ['init', 'elpi'],
+        all_pkgs:  ['init', 'math-comp', 'elpi'],
+    };
+
+    /* Global reference */
+    var coq;
+
+    loadJsCoq(jscoq_opts.base_path)
+        .then( () => coq = new CoqManager(jscoq_ids, jscoq_opts) );
+  </script>
+</body>
+</html>

@@ -2,7 +2,16 @@ PWD=$(shell pwd)
 opam = opam $(1) --root=$(PWD)/opam $(2)
 in_opam = eval `$(call opam, config, env)`; $(1)
 
-all: opam jscoq
+all: opam jscoq tutorials
+
+.PHONY: tutorials
+tutorials: docs/tutorial-elpi.md docs/tutorial-coq_elpi.md
+
+docs/tutorial-%.md:
+	echo '{% include header.html content="$*" %}' >  $@
+	$(call in_opam,\
+		cat `coqc -where`/user-contrib/elpi/tutorial_$*.v >> $@)
+	echo '{% include footer.html content="$*" %}' >> $@
 
 .PHONY: jscoq
 jscoq:
@@ -39,6 +48,8 @@ opam: Makefile
 	# elpi
 	$(call opam, pin, add elpi https://github.com/LPCIC/elpi.git --yes)
 	$(call opam, pin, add coq-elpi https://github.com/LPCIC/coq-elpi.git --yes)
+	$(call opam, upgrade, elpi coq-elpi --yes)
+
 	# jscoq dependencies
 	$(call opam, install, coq-mathcomp-ssreflect --yes)
 	$(call opam, install, ppx_deriving_yojson ppx_import --yes)
