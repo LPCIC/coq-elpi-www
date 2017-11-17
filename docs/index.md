@@ -33,3 +33,7 @@ variables, i.e. reuse λProlog's meta variables to implement Coq's ones.
 
 - [elpi](tutorial-elpi.html) basic tutorial about higher order logic programming
 - [coq-elpi](tutorial-coq_elpi.html) basic tutorial about the `elpi` module for Coq
+
+## Documentation
+
+- [API](https://github.com/LPCIC/coq-elpi/blob/master/coq-api.elpi) to access Coq
