@@ -13,7 +13,7 @@ jscoq:
 			git clean -dfx && \
 			git pull origin master && \
 			git submodule update --init elpi && \
-			(cd elpi && git clean -dfx) && \
+			(cd elpi && git clean -dfx) \
 		) && \
 		make coq ADDONS=elpi && \
 		ADDONS=elpi ./build.sh && \
