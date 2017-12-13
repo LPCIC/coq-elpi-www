@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="description" content="An Online IDE for the Coq Theorem Prover" />
+
+    <link rel="stylesheet" href="ui-external/bootstrap.min.css" />
+
+    <title>Tutorial: demo_CoqPL2018</title>
+  </head>
+
+<body>
+  <div id="ide-wrapper" class="toggled">
+  <div id="code-wrapper">
+  <div id="document">
+    <h3>Tutorial: demo_CoqPL2018</h3>
+  <div>
+    <textarea id="tutorial" >
+From elpi Require Import elpi.
+From Coq Require Import Bool.
+
+Elpi Command demo.
+
+Elpi Query &quot;
+  coq-locate &quot;&quot;nat&quot;&quot; N
+&quot;.
+
+Elpi Query &quot;
+  coq-locate &quot;&quot;nat&quot;&quot; N,
+  coq-locate &quot;&quot;le&quot;&quot; L,
+  coq-locate &quot;&quot;O&quot;&quot; Z,
+  T = prod `x` N (x \ app [L, Z, x])  % forall x : nat, 0 &lt;= x
+&quot;.
+
+Elpi Query &quot;
+  T = {{ forall x : nat, 0 &lt;= x }}
+&quot;.
+
+Elpi Query &quot;
+  T = {{ forall x : nat, lp:Z &lt;= x }},
+  coq-locate &quot;&quot;O&quot;&quot; Z
+&quot;.
+
+Elpi Query &quot;
+  coq-locate &quot;&quot;plus&quot;&quot; (const GR),
+  coq-env-const GR Bo Ty,
+  pp Ty NiceTy,
+  pp Bo NiceBo.
+&quot;.
+
+Elpi Query &quot;
+  coq-locate &quot;&quot;list&quot;&quot; (indt GR),
+  coq-env-indt GR Ind? Pno _ Arity KN KTy,
+  map KTy pp NiceKTy.
+&quot;.
+
+Elpi Command eq1 &quot;
+
+ main [str X] :-
+   coq-locate X (indt GR),
+   coq-env-indt GR _ _ _ _ KN KTy,
+   derive-eq (indt GR) KN KTy Cmp,
+   Name is X ^&quot;&quot;_cmp1&quot;&quot;,
+   coq-env-add-const Name Cmp _ _ _.
+
+ derive-eq T _ _ R :-
+   R = {{ fix f (n m : lp:T) {struct n} :
+          lp:T -&gt; lp:T -&gt; bool :=
+            lp:Bo f n m }},
+   Bo = f\ n\ m\ {{true}}.
+&quot;.
+Elpi Typecheck.
+
+Elpi eq1 nat. Print nat_cmp1.
+
+
+Elpi Command eq2 &quot;
+
+ main [str X] :-
+   coq-locate X (indt GR),
+   coq-env-indt GR _ _ _ _ KN KTy,
+   derive-eq (indt GR) KN KTy Cmp,
+   Name is X ^&quot;&quot;_cmp2&quot;&quot;,
+   coq-env-add-const Name Cmp _ _ _.
+
+ derive-eq T _ _ R :-
+   R = {{ fix f (n m : lp:T) {struct n} :
+          lp:T -&gt; lp:T -&gt; bool :=
+            lp:Bo f n m }},
+   safe-dest-app T (indt GR) Args,
+   pi f n m\
+     build-match-skeleton n GR Args
+       derive-eq-rty
+       derive-eq-bo1
+       (Bo f n m).
+
+  derive-eq-rty _ _ _ {{ bool }}.
+
+  derive-eq-bo1 _ _ _ _ {{ true }}.
+ 
+&quot;.
+Elpi Typecheck.
+
+Elpi eq2 nat. Print nat_cmp2.
+
+
+
+Elpi Command eq3 &quot;
+
+ main [str X] :-
+   coq-locate X (indt GR),
+   coq-env-indt GR _ _ _ _ KN KTy,
+   derive-eq (indt GR) KN KTy Cmp,
+   Name is X ^&quot;&quot;_cmp3&quot;&quot;,
+   coq-env-add-const Name Cmp _ _ _.
+
+ derive-eq T _ _ R :-
+   R = {{ fix f (n m : lp:T) {struct n} :
+          lp:T -&gt; lp:T -&gt; bool :=
+            lp:Bo f n m }},
+   safe-dest-app T (indt GR) Args,
+   pi f n m\
+     build-match-skeleton n GR Args
+       derive-eq-rty
+       (derive-eq-bo1 m GR Args)
+       (Bo f n m).
+
+  derive-eq-rty _ _ _ {{ bool }}.
+
+  derive-eq-bo1 M GR Args K _ _ _ R :-
+    build-match-skeleton M GR Args
+      derive-eq-rty
+      (derive-eq-bo2 K)
+      R.
+
+  derive-eq-bo2 K K _ _ _ {{ true }}.
+  derive-eq-bo2 _ _ _ _ _ {{ false }}.
+ 
+&quot;.
+Elpi Typecheck.
+
+Elpi eq3 nat. Print nat_cmp3.
+
+
+Elpi Command eq4 &quot;
+
+ main [str X] :-
+   coq-locate X (indt GR),
+   coq-env-indt GR _ _ _ _ KN KTy,
+   derive-eq (indt GR) KN KTy Cmp,
+   Name is X ^&quot;&quot;_cmp4&quot;&quot;,
+   coq-env-add-const Name Cmp _ _ _.
+
+ type eq-db term -&gt; term -&gt; prop.
+
+ derive-eq T _ _ R :-
+   R = {{ fix f (n m : lp:T) {struct n} :
+          lp:T -&gt; lp:T -&gt; bool :=
+            lp:Bo f n m }},
+   safe-dest-app T (indt GR) Args,
+   pi f n m\
+     eq-db T f =&gt;
+     build-match-skeleton n GR Args
+       derive-eq-rty
+       (derive-eq-bo1 m GR Args)
+       (Bo f n m).
+
+  derive-eq-rty _ _ _ {{ bool }}.
+
+  derive-eq-bo1 M GR Args K _ A _ R :-
+    build-match-skeleton M GR Args
+      derive-eq-rty
+      (derive-eq-bo2 K A)
+      R.
+
+  derive-eq-bo2 K [] K _ [] [] {{ true }}.
+  derive-eq-bo2 K [X|XS] K _ [Y|YS] [T|TS] {{ lp:CXY &amp;&amp; lp:R }} :-
+    eq-db T F, CXY = app [F,X,Y],
+    derive-eq-bo2 K XS K _ YS TS R.
+  derive-eq-bo2 _ _ _ _ _ _ {{ false }}.
+ 
+&quot;.
+Elpi Typecheck.
+
+Elpi eq4 nat. Print nat_cmp4.
+
+Eval compute in (nat_cmp4 3 4, nat_cmp4 7 7).
+
+
+From elpi Require Import derive.map derive.eq derive.param1.
+
+Elpi derive.eq list.         About list_eq.
+Elpi derive.map list.        About list_map.
+Elpi derive.param1 list.     About list_param1.
+Elpi derive.map list_param1. About list_param1_map.
+
+
+Elpi Tactic id &quot;
+  solve _ [goal Ctx Ev Ty _] _ :-
+    coq-say &quot;&quot;goal&quot;&quot; Ev &quot;&quot;is&quot;&quot; Ctx &quot;&quot;-------&quot;&quot; Ty.
+&quot;. 
+Elpi Typecheck.
+
+
+Lemma l1 x y z (H : x &lt; y) : y &lt; z -&gt; x &lt; z.
+Proof.
+elpi id.
+Abort.
+
+Elpi Tactic intro &quot;
+  solve [str S] [G] GS :-
+    coq-string-&gt;name S N,
+    refine (lam N hole x\ hole) G GS.
+&quot;.
+Elpi Typecheck.
+
+Lemma l2 x y z (H : x &lt; y) : y &lt; z -&gt; x &lt; z.
+Proof.
+elpi intro H1.
+Abort.
+
+Elpi Tactic auto &quot;
+  intro S G GS :- refine (lam S hole x\ hole) G GS.
+
+  exf (goal Ctx _ Ty _ as G) [] :-
+    exists Ctx (x\ x = decl V _ {{False}}),
+    refine {{ match lp:V in False return lp:Ty with end }} G [].
+
+  kon (goal _ _ Ty _ as G) GS :-
+    safe-dest-app Ty (indt GR) _,
+    coq-env-indt GR _ _ _ _ Ks Kt,
+    exists2 Ks Kt (k\ t\
+      saturate t k P,
+      refine P G GS).
+
+  any [T|_] G GS :- T G GS.
+  any [_|TS] G GS :- any TS G GS.
+
+  solve _ [G] [] :- repeat (any [exf, kon, intro `H`]) G [].
+&quot;.
+Elpi Typecheck.
+
+Lemma l3 : forall P : Prop, (False -&gt; P) /\ (False \/ True).
+Proof.
+elpi intro P.
+elpi auto. 
+Qed.
+
+
+
+</textarea>
+  </div> <!-- /#panel body -->
+  </div> <!-- /#document -->
+  </div> <!-- /#code-wrapper -->
+  </div> <!-- /#ide-wrapper -->
+
+  <script src="ui-js/jscoq-loader.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    var jscoq_ids  = ['tutorial' ];
+    var jscoq_opts = {
+        prelude:   false,
+        mock:      false,
+        base_path: './',
+        init_pkgs: ['init', 'elpi'],
+        all_pkgs:  ['init', 'math-comp', 'elpi'],
+    };
+
+    /* Global reference */
+    var coq;
+
+    loadJsCoq(jscoq_opts.base_path)
+        .then( () => coq = new CoqManager(jscoq_ids, jscoq_opts) );
+  </script>
+</body>
+</html>

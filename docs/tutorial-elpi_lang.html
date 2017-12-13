@@ -429,7 +429,7 @@ Fail Elpi Query &quot;
    manipulate syntax trees with binders in λProlog.
 
    This piece of software (coq-elpi) embeds in Coq
-   the elpi λProlog interpreter and exposes the
+   the ELPI λProlog interpreter and exposes the
    Coq datatype of terms to such scripting language.
 
    In addition to that it exposes to the scripting
@@ -438,6 +438,139 @@ Fail Elpi Query &quot;
    such environment terms built by a λProlog program.
 
  *)
+
+(* ------------------------------------------------ *)
+
+(* Extensions to λProlog implemented in Elpi
+
+   Elpi extends λProlog with syntactic constraints
+   and rules to manipulate the set of constraints.
+
+   Syntactic constraints are goals suspended on
+   a variable and are resumed as soon as such variable
+   gets instantiated.
+
+   A companion facility is the declaration of modes.
+   The argument of a predicate can be marked as input
+   to avoid it being instantiated when unifying the
+   the goal with the head of a clause.
+
+*)
+
+(* A simple example: Peano&#39;s addition *)
+
+Elpi Accumulate &quot;
+
+kind nat type.
+type z nat.
+type s nat -&gt; nat.
+type add nat -&gt; nat -&gt; nat -&gt; prop.
+
+add (s X) Y (s Z) :- add X Y Z.
+add z X X.
+
+&quot;.
+
+(* It computes! *)
+
+Elpi Query &quot;
+add (s (s z)) (s z) R.
+&quot;.
+
+(* Unfortunately the relation does not work well
+   when the first argument is flexible.  Depending on the
+   order of the clause can wither diverge or pick
+   z as a value for X (that may not be what one wants) *)
+
+Elpi Bound Steps 100.
+Fail Elpi Query &quot;add X (s z) Y&quot;.
+Elpi Bound Steps 0.
+
+(* We can use the mode directive in order to
+   match arguments marked as i against the patterns
+   in the head of clauses *)
+
+Elpi Accumulate &quot;
+
+kind nat type.
+type z nat.
+type s nat -&gt; nat.
+type sum nat -&gt; nat -&gt; nat -&gt; prop.
+mode (sum i i o).
+
+sum (s X) Y (s Z) :- sum X Y Z.
+sum z X X.
+
+&quot;.
+
+Fail Elpi Query &quot; sum X (s z) Y. &quot;.
+
+(* We can also suspend such goals and turn them into
+   syntactic constraints *)
+
+Elpi Accumulate &quot;
+sum X Y Z :- var X, declare_constraint (sum X Y Z) X.
+&quot;.
+
+Elpi Query &quot;sum X (s z) Z. &quot;.
+
+(* Syntactic constraints are resumed when the variable
+   they are suspended on is assigned *)
+
+Elpi Query &quot; sum X (s z) Z, X = z. &quot;.
+
+Fail Elpi Query &quot; sum X (s z) (s (s z)), X = z. &quot;.
+Elpi Query &quot; sum X (s z) (s (s z)), (X = z ; X = s z). &quot;.
+
+(* Remark how computation suspends, then makes progess,
+   then suspends again... *)
+
+Elpi Query &quot; sum X (s z) Y, 
+             print_constraints,
+             X = s Z, 
+             print_constraints, 
+             Z = z. &quot;.
+
+(* Sometimes the set of syntactic constraints becomes unsatisfiable
+   and we would like to be able to fail early. *)
+
+Elpi Accumulate &quot;
+
+pred even i:nat.
+pred odd  i:nat.
+
+even z.
+even (s X) :- odd X.
+odd (s X) :- even X.
+
+odd X :- var X, declare_constraint (odd X) X.
+even X :- var X, declare_constraint (even X) X.
+
+&quot;.
+
+Elpi Query &quot; even (s X), odd (s X)&quot;.
+
+(* A rule can see the set of syntactic constraints as a whole,
+   and inject new goals, in this case fail *)
+
+Elpi Accumulate &quot;
+
+constraint even odd {
+  rule (even X) (odd X) &lt;=&gt; 
+   (coq-say X &quot;&quot;can&#39;t be even and odd at the same time&quot;&quot;, fail).
+}
+
+&quot;.
+
+Fail Elpi Query &quot; even (s X), odd (s X)&quot;.
+
+
+(* ------------------------------------------------ *)
+
+(* All extra features provided by Elpi are documented
+   in the following page:
+      https://github.com/LPCIC/elpi/ELPI.md
+*)
 
 (* ------------------------------------------------ *)
 

@@ -22,6 +22,7 @@
       "pkg_id": [ "elpi", "tutorial" ],
       "vo_files": [
         [ "coq_elpi.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "demo_CoqPL2018.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "elpi_lang.vo", "d41d8cd98f00b204e9800998ecf8427e" ]
       ],
       "cma_files": []

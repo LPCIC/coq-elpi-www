@@ -4,7 +4,7 @@ export OPAMROOT
 
 all: jscoq tutorials
 	
-tutorials: docs/tutorial-elpi_lang.html docs/tutorial-coq_elpi.html
+tutorials: docs/tutorial-elpi_lang.html docs/tutorial-coq_elpi.html docs/tutorial-demo_CoqPL2018.html
 
 jscoq:
 	eval `opam config env` && \
