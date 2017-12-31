@@ -31,10 +31,12 @@
     {
       "pkg_id": [ "elpi", "derive" ],
       "vo_files": [
+        [ "param1P.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "param2.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "map.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "eq.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "eqOK.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "induction.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "isK.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "projK.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "param1.vo", "d41d8cd98f00b204e9800998ecf8427e" ]
