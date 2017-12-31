@@ -22,41 +22,39 @@ From Coq Require Import Bool.
 Elpi Command demo.
 
 (*
-  Let&#39;s build a few terms to get acquainted with how Coq
-  terms are represented in Elpi. 
-*)
-
-(*
   A few type declarations (taken from coq-api.elpi):
 
-type indt  @gref -&gt; term. % nat, list, ...
-type indc  @gref -&gt; term. % O, S, nil, cons, ...
-type const @gref -&gt; term. % Nat.add, List.append, ...
-
-type lam  @name -&gt; term -&gt; (term -&gt; term) -&gt; term. % fun x : t =&gt;
-type prod @name -&gt; term -&gt; (term -&gt; term) -&gt; term. % forall x : t,
-
-type app   list term -&gt; term.                   % app [hd|args]
-type match term -&gt; term -&gt; list term -&gt; term.   % match t p [branch])
-type fix   @name -&gt; int -&gt; term -&gt; (term -&gt; term) -&gt; term. % fix name rno ty bo
+    type indt  @gref -&gt; term. % nat, list, ...
+    type indc  @gref -&gt; term. % O, S, nil, cons, ...
+    type const @gref -&gt; term. % Nat.add, List.append, ...
+    
+    type lam  @name -&gt; term -&gt; (term -&gt; term) -&gt; term. % fun x : t =&gt;
+    type prod @name -&gt; term -&gt; (term -&gt; term) -&gt; term. % forall x : t,
+    
+    type app   list term -&gt; term.                   % app [hd|args]
+    type match term -&gt; term -&gt; list term -&gt; term.   % match t p [branch])
+    type fix   @name -&gt; int -&gt; term -&gt; (term -&gt; term) -&gt; term. % fix name rno ty bo
 
   where @name is a pretty print hint, @gref a global name.
   The former is printed as `name` while the latter as «name».
+    
+  Note that &quot;x\ ...&quot; is the lambda abstraction of
+  Elpi. E.g. the identity function is &quot;x\ x&quot; and
+  Coq&#39;s identity function is (lam `x` (indt «nat») x\ x).
 
-  The coq-locate predicate is similar to the Locate command of Coq.
 *)
+
+(* Available at: http://goo.gl/r6Nsja
+
+  The coq-locate predicate is similar to
+  the Locate command of Coq.  *)
 
 Elpi Query &quot;
   coq-locate &quot;&quot;nat&quot;&quot; Nat
 &quot;.
 
+(* Now lets build forall x : nat, 0 &lt;= x *)
 
-(* Now lets build
-      forall x : nat, 0 &lt;= x
-    Note that &quot;x\ ...&quot; is the lambda abstraction of
-    Elpi. E.g. the identity function is &quot;x\ x&quot; and
-    Coq&#39;s identity function is (lam `x` (indt «nat») x\ x).
-*)
 Elpi Query &quot;
   coq-locate &quot;&quot;nat&quot;&quot; Nat,
   coq-locate &quot;&quot;le&quot;&quot; Le,
@@ -167,7 +165,7 @@ Elpi Command eq3 &quot;
 
   derive-eq-rty _ _ _ {{ bool }}.
 
-  derive-eq-bo M T  K I V VT R :-
+  derive-eq-bo M T  K I V VT  R :-
     build-match M T
       derive-eq-rty
       (derive-eq-body K I V VT)
