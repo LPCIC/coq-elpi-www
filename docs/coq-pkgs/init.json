@@ -14,11 +14,10 @@
       "pkg_id": [ "Coq", "syntax" ],
       "vo_files": [],
       "cma_files": [
+        [ "numeral_notation_plugin.cmo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "ascii_syntax_plugin.cmo", "d41d8cd98f00b204e9800998ecf8427e" ],
-        [ "nat_syntax_plugin.cmo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "string_syntax_plugin.cmo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "int31_syntax_plugin.cmo", "d41d8cd98f00b204e9800998ecf8427e" ],
-        [ "z_syntax_plugin.cmo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "r_syntax_plugin.cmo", "d41d8cd98f00b204e9800998ecf8427e" ]
       ]
     },
@@ -82,6 +81,7 @@
     {
       "pkg_id": [ "Coq", "Init" ],
       "vo_files": [
+        [ "Decimal.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "Notations.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "Datatypes.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "Logic_Type.vo", "d41d8cd98f00b204e9800998ecf8427e" ],

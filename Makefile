@@ -4,18 +4,12 @@ export OPAMROOT
 
 all: jscoq tutorials
 	
-tutorials: docs/tutorial-elpi_lang.html docs/tutorial-coq_elpi.html docs/tutorial-demo_CoqPL2018.html
+tutorials: docs/tutorial-elpi_lang.html docs/tutorial-coq_elpi.html docs/tutorial-demo_CoqPL2018.html docs/tutorial-demo_derive.html
 
 jscoq:
-	eval `opam config env` && \
+	eval `opam env` && \
 	       	cd jscoq && \
-		(cd coq-external/elpi && \
-			git clean -dfx && \
-			git pull origin master && \
-			git submodule update --init elpi && \
-			(cd elpi && git clean -dfx) \
-		) && \
-		make coq ADDONS=elpi && \
+		ADDOND=elpi make coq ADDONS=elpi && \
 		ADDONS=elpi ./build.sh && \
 		make dist BUILDDIR=../docs/
 	mkdir docs/ui-external/CodeMirror/mode/coq -p
@@ -33,6 +27,7 @@ setup:
 	opam init -j 2 -y
 	git submodule update --init
 	cd jscoq && ./toolchain-setup.sh
+	opam install elpi
 
 run:
 	chromium --allow-file-access-from-files \

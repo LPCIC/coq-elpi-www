@@ -39,8 +39,8 @@ From elpi Require Import elpi.
 Elpi Command tutorial.hello.
 (* Add a clause for main *)
 Elpi Accumulate &quot;
-  main []     :- coq-say &quot;&quot;hello world&quot;&quot;.
-  main [str Name] :- Msg is &quot;&quot;hello &quot;&quot; ^ Name, coq-say Msg.
+  main []     :- coq.say &quot;&quot;hello world&quot;&quot;.
+  main [str Name] :- Msg is &quot;&quot;hello &quot;&quot; ^ Name, coq.say Msg.
 &quot;.
 (* Caveat: when clauses are accumulated from
    a .v file they are just strings, hence
@@ -61,13 +61,13 @@ Elpi tutorial.hello &quot;Coq!&quot;.
 (* It is so common to set the current command name and
    immediately accumulate some code that the following
    shortcut is provided. *)
-Elpi Command tutorial.hello2 &quot; main [] :- coq-say &quot;&quot;hello there&quot;&quot;. &quot;.
+Elpi Command tutorial.hello2 &quot; main [] :- coq.say &quot;&quot;hello there&quot;&quot;. &quot;.
 Elpi tutorial.hello2.
 
 (* Elpi programs (commands or tactics) are open ended: they can
    be extended later on by accumulating extra code. *)
 Elpi Command tutorial.hello &quot;
-  main [str X, str Y, str Z] :- Msg is X ^ Y ^ Z, coq-say Msg. 
+  main [str X, str Y, str Z] :- Msg is X ^ Y ^ Z, coq.say Msg. 
 &quot;.
 Elpi tutorial.hello &quot;too&quot; &quot;many&quot; &quot;args&quot;.
 
@@ -77,13 +77,13 @@ Elpi tutorial.hello &quot;too&quot; &quot;many&quot; &quot;args&quot;.
 Elpi Command tutorial.hello3 &quot;
 :name &quot;&quot;error-empty-args&quot;&quot;
   main []  :- fatal-error &quot;&quot;1 argument expected&quot;&quot;.
-  main [str X] :- coq-say X. &quot;.
+  main [str X] :- coq.say X. &quot;.
 Fail Elpi tutorial.hello3.
 
 (* Let&#39;s graft this clause before the one giving an error *)
 Elpi Accumulate &quot;
 :before &quot;&quot;error-empty-args&quot;&quot;
-  main [] :- coq-say &quot;&quot;fake argument&quot;&quot;.
+  main [] :- coq.say &quot;&quot;fake argument&quot;&quot;.
 &quot;.
 Elpi tutorial.hello3.
 (* Note that when the name of Program or Command is not specified,
@@ -102,7 +102,7 @@ Elpi Print
    a larger program) *)
 
 Elpi Query &quot;
-  coq-say &quot;&quot;This is not main&quot;&quot;, X is 2 + 3.
+  coq.say &quot;&quot;This is not main&quot;&quot;, X is 2 + 3.
 &quot;.
 
 (* In such case, the assignment of variables
@@ -116,7 +116,7 @@ Elpi Query tutorial.hello &quot; main []. &quot;.
 
 (* Important: elpi comes with a type checker. *)
 Elpi Command tutorial.illtyped &quot;
-  main _ :- coq-say (app (sort prop)).
+  main _ :- coq.say (app (sort prop)).
 &quot;.
 Fail Elpi Typecheck tutorial.illtyped.
 
@@ -203,28 +203,28 @@ type typ  @univ -&gt; universe. % predicative sort of datatypes (carries a level
 
   A term of type @name is just a name hint, it is used for pretty printing
   only. Indeed any two @name are considered as equal. A name hint &quot;x&quot; can
-  be created via the (coq-string-&gt;name &quot;x&quot;) API, or with the dedicated syntax
+  be created via the (coq.string-&gt;name &quot;x&quot;) API, or with the dedicated syntax
   `x` (backticks, not apostrophes).
 
 *)
 
 Elpi Query &quot;
   `x` = `y`,
-  coq-string-&gt;name &quot;&quot;n&quot;&quot; N.
+  coq.string-&gt;name &quot;&quot;n&quot;&quot; N.
 &quot;.
 
 (* 
 
   A term of type @gref is the name of a global object (an inductive type or constructor,
-  a definition or a theorem).  The coq-locate API can be used to generate terms in the @gref
+  a definition or a theorem).  The coq.locate API can be used to generate terms in the @gref
   type.  There is no shortcut syntax to write a @gref, even if the glob quotation we see
   later can sometime help in doing that.
 
 *)
 
 Elpi Query &quot;
-  coq-locate &quot;&quot;S&quot;&quot; (indc GRS),
-  coq-locate &quot;&quot;O&quot;&quot; (indc GRO),
+  coq.locate &quot;&quot;S&quot;&quot; (indc GRS),
+  coq.locate &quot;&quot;O&quot;&quot; (indc GRO),
   not(GRS = GRO).
 &quot;.
 
@@ -239,10 +239,10 @@ Elpi Query &quot;
 *)
 
 Elpi Query &quot;
-  coq-univ-new [] U, coq-univ-new [] V,
-  coq-univ-sup U U+1,
-  coq-univ-leq U V,
-  not(coq-univ-leq U+1 U). % This constraint can&#39;t be allowed in the store!
+  coq.univ.new [] U, coq.univ.new [] V,
+  coq.univ.sup U U+1,
+  coq.univ.leq U V,
+  not(coq.univ.leq U+1 U). % This constraint can&#39;t be allowed in the store!
 &quot;.
 
 (** Reading Coq&#39;s environment **************** *)
@@ -252,20 +252,20 @@ Elpi Query &quot;
    APIs to access Coq&#39;s environment are listed in
    coq-lib and the are all called coq-env-... 
    
-   As we have seen already, coq-locate maps a string to the corresponding
+   As we have seen already, coq.locate maps a string to the corresponding
    term global constant/inductive/constructor.
 
 *)
 
 Elpi Command tutorial.env.read &quot;
   print-ind GR :-
-    coq-env-indt GR IsInd Lno LUno Ty Knames Ktypes,
-    coq-say GR, coq-say Knames, coq-say Ktypes.
+    coq.env.indt GR IsInd Lno LUno Ty Knames Ktypes,
+    coq.say GR, coq.say Knames, coq.say Ktypes.
   print-const GR :-
-    coq-env-const GR BO TY, coq-say TY, coq-say BO.
+    coq.env.const GR BO TY, coq.say TY, coq.say BO.
   main [str X] :-
-    coq-locate X (indt GR), print-ind GR,
-    X_ind is X ^ &quot;&quot;_rect&quot;&quot;, coq-locate X_ind (const GRI),
+    coq.locate X (indt GR), print-ind GR,
+    X_ind is X ^ &quot;&quot;_rect&quot;&quot;, coq.locate X_ind (const GRI),
       print-const GRI.
 &quot;.
 
@@ -291,16 +291,16 @@ Elpi tutorial.env.read &quot;nat&quot;.
 *)
 
 Elpi Command tutorial.env.write &quot;
-  int-&gt;nat 0 Z :- coq-locate &quot;&quot;O&quot;&quot; Z.
+  int-&gt;nat 0 Z :- coq.locate &quot;&quot;O&quot;&quot; Z.
   int-&gt;nat N (app[S,X]) :-
-    coq-locate &quot;&quot;S&quot;&quot; S,
+    coq.locate &quot;&quot;S&quot;&quot; S,
     M is N - 1, int-&gt;nat M X.
   main [str IndName, str Name] :-
-    coq-locate IndName (indt GR),
-    coq-env-indt GR _ _ _ _ Kn _,       % get the names of the constructors
+    coq.locate IndName (indt GR),
+    coq.env.indt GR _ _ _ _ Kn _,       % get the names of the constructors
     length Kn N,                        % count them
     int-&gt;nat N Nnat,                    % turn the integer into a nat 
-    coq-env-add-const Name Nnat hole _ (const NewGRForName). % save it
+    coq.env.add-const Name Nnat hole _ (const NewGRForName). % save it
 &quot;.
 
 Elpi tutorial.env.write &quot;nat&quot; &quot;nK_nat&quot;.
@@ -325,11 +325,11 @@ Elpi Command tutorial.quotations &quot;
   int-&gt;nat 0 {{0}}.
   int-&gt;nat N {{S lp:X}} :- M is N - 1, int-&gt;nat M X.
   main [str X, str Name] :-
-    coq-locate X (indt GR),
-    coq-env-indt GR _ _ _ _ Kn _,
+    coq.locate X (indt GR),
+    coq.env.indt GR _ _ _ _ Kn _,
     length Kn N,
     int-&gt;nat N Nnat,
-    coq-env-add-const Name Nnat {{nat}} _ _.
+    coq.env.add-const Name Nnat {{nat}} _ _.
 &quot;.
 
 Elpi tutorial.quotations &quot;nat&quot; &quot;nK_nat2&quot;.
@@ -345,7 +345,7 @@ Print nK_nat2.
 
 Elpi Query &quot;
   T = {{0 = 1}}, % Note, the iplicit argument of eq is not resolved
-  coq-elaborate T T1 Ty. % Invoke standard Coq elaborator
+  coq.elaborate T T1 Ty. % Invoke standard Coq elaborator
 &quot;.
 
 (** Tactics  ****************************** *)
@@ -357,9 +357,9 @@ Elpi Tactic tutorial.tactic1.
 Elpi Accumulate &quot;
 
   solve Arguments [goal Ctx Evar Type Attribues] [] :-
-    coq-say &quot;&quot;Goal:&quot;&quot; Ctx &quot;&quot;|-&quot;&quot; Evar &quot;&quot;:&quot;&quot; Type, % Note: coq-say is variadic
-    coq-say &quot;&quot;Proof state:&quot;&quot;, coq-evd-print,
-    coq-say &quot;&quot;Arguments: &quot;&quot; Arguments,
+    coq.say &quot;&quot;Goal:&quot;&quot; Ctx &quot;&quot;|-&quot;&quot; Evar &quot;&quot;:&quot;&quot; Type, % Note: coq.say is variadic
+    coq.say &quot;&quot;Proof state:&quot;&quot;, coq.evd-print,
+    coq.say &quot;&quot;Arguments: &quot;&quot; Arguments,
     Ctx =&gt; of {{fun _ =&gt; I}} Type Evar. % We invoke elpi&#39;s elaborator
 
 &quot;.
@@ -409,7 +409,7 @@ split.
    fails, and the second one is tried. *)
 
 - 
-  elpi query &quot; coq-evd-print &quot;.
+  elpi query &quot; coq.evd-print &quot;.
   elpi tutorial.tactic2.
 Qed.
 
@@ -482,7 +482,7 @@ pattern-match (goal Hyps _ Type _) (with PHyps PGoal Cond) :-
 
 solve _ [(goal _ E _ _) as G] _ :-
   pattern-match G (with [decl X NameX T,decl Y NameY T] T (not(X = Y))),
-  coq-say &quot;&quot;Both&quot;&quot; NameX &quot;&quot;and&quot;&quot; NameY &quot;&quot;solve the goal, picking the first one&quot;&quot;,
+  coq.say &quot;&quot;Both&quot;&quot; NameX &quot;&quot;and&quot;&quot; NameY &quot;&quot;solve the goal, picking the first one&quot;&quot;,
   E = X.
 
 &quot;.

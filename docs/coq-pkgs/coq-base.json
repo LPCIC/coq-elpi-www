@@ -251,6 +251,9 @@
       "pkg_id": [ "Coq", "Strings" ],
       "vo_files": [
         [ "String.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "BinaryString.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "OctalString.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "HexString.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "Ascii.vo", "d41d8cd98f00b204e9800998ecf8427e" ]
       ],
       "cma_files": []

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta name="description" content="An Online IDE for the Coq Theorem Prover" />
+
+    <link rel="stylesheet" href="ui-external/bootstrap.min.css" />
+
+    <title>Tutorial: demo_derive</title>
+  </head>
+
+<body>
+  <div id="ide-wrapper" class="toggled">
+  <div id="code-wrapper">
+  <div id="document">
+    <h3>Tutorial: demo_derive</h3>
+  <div>
+    <textarea id="tutorial" >
+From elpi Require Import derive.
+
+Inductive rtree A := Leaf (a : A) | Node (l : list (rtree A)).
+About rtree_ind.
+
+Unset Elimination Schemes.
+
+Elpi derive nat.
+
+About nat_eq_OK.
+
+Elpi derive list.
+
+About list_induction.
+About list_eq_correct.
+
+Elpi derive rtree.
+
+About rtree_induction.
+Print rtree_eq.
+About rtree_eq_correct.
+Print rtree_eq_correct.
+</textarea>
+  </div> <!-- /#panel body -->
+  </div> <!-- /#document -->
+  </div> <!-- /#code-wrapper -->
+  </div> <!-- /#ide-wrapper -->
+
+  <script src="ui-js/jscoq-loader.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    var jscoq_ids  = ['tutorial' ];
+    var jscoq_opts = {
+        prelude:   false,
+        mock:      false,
+        base_path: './',
+        init_pkgs: ['init', 'elpi'],
+        all_pkgs:  ['init', 'math-comp', 'elpi'],
+    };
+
+    /* Global reference */
+    var coq;
+
+    loadJsCoq(jscoq_opts.base_path)
+        .then( () => coq = new CoqManager(jscoq_ids, jscoq_opts) );
+  </script>
+</body>
+</html>

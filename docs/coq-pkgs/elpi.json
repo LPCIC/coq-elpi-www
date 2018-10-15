@@ -4,7 +4,10 @@
   "pkgs": [
     {
       "pkg_id": [ "elpi" ],
-      "vo_files": [ [ "elpi.vo", "d41d8cd98f00b204e9800998ecf8427e" ] ],
+      "vo_files": [
+        [ "elpi.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "derive.vo", "d41d8cd98f00b204e9800998ecf8427e" ]
+      ],
       "cma_files": [
         [ "elpi_plugin.cma", "d41d8cd98f00b204e9800998ecf8427e" ]
       ]
@@ -23,7 +26,10 @@
       "vo_files": [
         [ "coq_elpi.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "demo_memoization.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "demo_command.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "demo_CoqPL2018.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "demo_tactic.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "demo_derive.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "elpi_lang.vo", "d41d8cd98f00b204e9800998ecf8427e" ]
       ],
       "cma_files": []
@@ -31,15 +37,21 @@
     {
       "pkg_id": [ "elpi", "derive" ],
       "vo_files": [
+        [ "invert.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "bcongr.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "idx2inv.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "param1P.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "param2.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "cast.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "map.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "eq.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "eqOK.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "eqK.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "induction.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "isK.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
         [ "projK.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
-        [ "param1.vo", "d41d8cd98f00b204e9800998ecf8427e" ]
+        [ "param1.vo", "d41d8cd98f00b204e9800998ecf8427e" ],
+        [ "eqcorrect.vo", "d41d8cd98f00b204e9800998ecf8427e" ]
       ],
       "cma_files": []
     }

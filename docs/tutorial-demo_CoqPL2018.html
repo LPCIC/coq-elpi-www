@@ -46,19 +46,19 @@ Elpi Command demo.
 
 (* Available at: http://goo.gl/r6Nsja
 
-  The coq-locate predicate is similar to
+  The coq.locate predicate is similar to
   the Locate command of Coq.  *)
 
 Elpi Query &quot;
-  coq-locate &quot;&quot;nat&quot;&quot; Nat
+  coq.locate &quot;&quot;nat&quot;&quot; Nat
 &quot;.
 
 (* Now lets build forall x : nat, 0 &lt;= x *)
 
 Elpi Query &quot;
-  coq-locate &quot;&quot;nat&quot;&quot; Nat,
-  coq-locate &quot;&quot;le&quot;&quot; Le,
-  coq-locate &quot;&quot;O&quot;&quot; Zero,
+  coq.locate &quot;&quot;nat&quot;&quot; Nat,
+  coq.locate &quot;&quot;le&quot;&quot; Le,
+  coq.locate &quot;&quot;O&quot;&quot; Zero,
   T = prod `x` Nat (x \ app [Le, Zero, x])  
 &quot;.
 
@@ -72,23 +72,23 @@ Elpi Query &quot;
 
 Elpi Query &quot;
   T = {{ forall x : nat, lp:Z &lt;= x }},
-  coq-locate &quot;&quot;O&quot;&quot; Z
+  coq.locate &quot;&quot;O&quot;&quot; Z
 &quot;.
 
 (* Let&#39;s pull from Coq&#39;s environment the
     recursive definition of plus *)
 
 Elpi Query &quot;
-  coq-locate &quot;&quot;plus&quot;&quot; (const GR),
-  coq-env-const GR Bo Ty
+  coq.locate &quot;&quot;plus&quot;&quot; (const GR),
+  coq.env.const GR Bo Ty
 &quot;.
 
 (* Let&#39;s pull from Coq&#39;s environment the
     declaration of nat *)
 
 Elpi Query &quot;
-  coq-locate &quot;&quot;nat&quot;&quot; (indt GR),
-  coq-env-indt GR Ind? Pno _ Arity KN KTy
+  coq.locate &quot;&quot;nat&quot;&quot; (indt GR),
+  coq.env.indt GR Ind? Pno _ Arity KN KTy
 &quot;.
 
 (* --------------------------------------------- *)
@@ -102,10 +102,10 @@ Elpi Query &quot;
 Elpi Command eq1 &quot;
 
  main [str X] :-
-   coq-locate X (indt GR),
+   coq.locate X (indt GR),
    derive-eq (indt GR) Cmp,
    Name is X ^&quot;&quot;_cmp1&quot;&quot;,
-   coq-env-add-const Name Cmp _ _ _.
+   coq.env.add-const Name Cmp _ _ _.
 
  derive-eq T R :-
    R = {{ fix f (n m : lp:T) {struct n} : bool :=
@@ -121,10 +121,10 @@ Elpi eq1 nat. Print nat_cmp1.
 Elpi Command eq2 &quot;
 
  main [str X] :-
-   coq-locate X (indt GR),
+   coq.locate X (indt GR),
    derive-eq (indt GR) Cmp,
    Name is X ^&quot;&quot;_cmp2&quot;&quot;,
-   coq-env-add-const Name Cmp _ _ _.
+   coq.env.add-const Name Cmp _ _ _.
 
  derive-eq T R :-
    R = {{ fix f (n m : lp:T) {struct n} : bool :=
@@ -149,10 +149,10 @@ Elpi eq2 nat. Print nat_cmp2.
 Elpi Command eq3 &quot;
 
  main [str X] :-
-   coq-locate X (indt GR),
+   coq.locate X (indt GR),
    derive-eq (indt GR) Cmp,
    Name is X ^&quot;&quot;_cmp3&quot;&quot;,
-   coq-env-add-const Name Cmp _ _ _.
+   coq.env.add-const Name Cmp _ _ _.
 
  derive-eq T R :-
    R = {{ fix f (n m : lp:T) {struct n} : bool :=
@@ -183,10 +183,10 @@ Elpi eq3 nat. Print nat_cmp3.
 Elpi Command eq4 &quot;
 
  main [str X] :-
-   coq-locate X (indt GR),
+   coq.locate X (indt GR),
    derive-eq (indt GR) Cmp,
    Name is X ^&quot;&quot;_cmp4&quot;&quot;,
-   coq-env-add-const Name Cmp _ _ _.
+   coq.env.add-const Name Cmp _ _ _.
 
  type eq-db term -&gt; term -&gt; prop.
 
@@ -232,8 +232,10 @@ Inductive tree := Leaf | Node : list tree -&gt; tree.
 
 About tree_ind.
 
-Elpi derive.param1 list list_Forall.     About list_Forall.
-Elpi derive.param1P list_Forall. 
+Elpi derive.param1 list is_.     About is_list. 
+Elpi derive.param1P is_list list_. 
+Elpi derive.map is_list.
+Elpi derive.param1 tree.
 Elpi derive.induction tree.           About tree_induction.
 
 (* -------------------------------------------------- *)
@@ -246,7 +248,7 @@ Elpi derive.induction tree.           About tree_induction.
 
 Elpi Tactic id &quot;
   solve _ [goal Ctx Ev Ty _] _ :-
-    coq-say &quot;&quot;goal&quot;&quot; Ev &quot;&quot;is\n&quot;&quot; Ctx &quot;&quot;\n-------\n&quot;&quot; Ty.
+    coq.say &quot;&quot;goal&quot;&quot; Ev &quot;&quot;is\n&quot;&quot; Ctx &quot;&quot;\n-------\n&quot;&quot; Ty.
 &quot;. 
 Elpi Typecheck.
 
@@ -275,7 +277,7 @@ Qed.
 
 Elpi Tactic intro &quot;
   solve [str S] [G] GS :-
-    coq-string-&gt;name S N,
+    coq.string-&gt;name S N,
     refine (lam N hole x\ hole) G GS.
 &quot;.
 Elpi Typecheck.
@@ -298,7 +300,7 @@ Elpi Tactic auto &quot;
   % Constructor
   kon (goal _ _ Ty _ as G) GS :-
     safe-dest-app Ty (indt GR) _,
-    coq-env-indt GR _ _ _ _ Ks Kt,
+    coq.env.indt GR _ _ _ _ Ks Kt,
     exists2 Ks Kt (k\ t\
       saturate t k P,
       refine P G GS).
