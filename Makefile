@@ -18,7 +18,7 @@ jscoq:
 	cp jscoq/ui-external/CodeMirror/mode/coq/coq.js docs/ui-external/CodeMirror/mode/coq
 	cp -r ext/CodeMirror-TeX-input docs/ui-external/
 
-docs/tutorial-%.html: jscoq/coq-external/elpi/theories/tutorial/%.v Makefile jscoq
+docs/tutorial-%.html: jscoq/coq-external/elpi/theories/tutorial/%.v #Makefile jscoq
 	sed 's/@TUTORIAL@/$*/' docs/_includes/header.html >  $@
 	sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g; s/'"'"'/\&#39;/g' $< >> $@
 	cat docs/_includes/footer.html >> $@
